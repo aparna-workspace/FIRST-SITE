@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Welcome</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js" defer></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const info = document.getElementById("info");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // Check user session
+      const { data: { user } } = await supabaseClient.auth.getUser();
+
+      if (!user) {
+        // Not logged in -> go back home
+        window.location.href = "index.html";
+        return;
+      }
+
+      info.textContent = "Welcome to our site, " + user.email + " 🎉";
+
+      logoutBtn.addEventListener("click", async () => {
+        await supabaseClient.auth.signOut();
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Welcome Page</h1>
+  <p id="info">Checking login...</p>
+  <button id="logoutBtn">Logout</button>
+</body>
+</html>
